@@ -1,0 +1,20 @@
+{
+  "name": "tinyapp",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/cvsluis/tinyapp.git"
+  },
+  "keywords": [],
+  "author": "Caitlin Vandersluis",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/cvsluis/tinyapp/issues"
+  },
+  "homepage": "https://github.com/cvsluis/tinyapp#readme"
+}
