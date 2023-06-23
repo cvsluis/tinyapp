@@ -114,6 +114,7 @@ app.post("/urls/:id/delete", (req, res) => {
   res.redirect("/urls");
 });
 
+// Register
 app.post("/register", (req, res) => {
   const id = generateRandomString();
   const email = req.body.email;
