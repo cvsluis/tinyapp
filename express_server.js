@@ -44,6 +44,14 @@ app.get("/urls/new", (req, res) => {
   res.render("urls_new", templateVars);
 });
 
+// View route to registration page
+app.get("/urls/register", (req, res) => {
+  const templateVars = {
+    username: req.cookies["username"],
+  };
+  res.render("urls_registration", templateVars);
+});
+
 // View route to one URL
 app.get("/urls/:id", (req, res) => {
   const templateVars = {
