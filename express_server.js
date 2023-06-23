@@ -13,6 +13,19 @@ const urlDatabase = {
   "9sm5xK": "http://www.google.com"
 };
 
+const users = {
+  userRandomID: {
+    id: "userRandomID",
+    email: "user@example.com",
+    password: "purple-monkey-dinosaur",
+  },
+  user2RandomID: {
+    id: "user2RandomID",
+    email: "user2@example.com",
+    password: "dishwasher-funk",
+  },
+};
+
 const generateRandomString = () => {
   let result = '';
   const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
@@ -29,33 +42,37 @@ app.get("/", (req, res) => {
 
 // View all URLs
 app.get("/urls", (req, res) => {
+  const user_id = req.cookies.user_id;
   const templateVars = {
-    username: req.cookies["username"],
-    urls: urlDatabase
+    urls: urlDatabase,
+    user: users[user_id]
   };
   res.render("urls_index", templateVars);
 });
 
 // View route to create new URL
 app.get("/urls/new", (req, res) => {
+  const user_id = req.cookies.user_id;
   const templateVars = {
-    username: req.cookies["username"],
+    user: users[user_id]  
   };
   res.render("urls_new", templateVars);
 });
 
 // View route to registration page
 app.get("/urls/register", (req, res) => {
+  const user_id = req.cookies.user_id;
   const templateVars = {
-    username: req.cookies["username"],
+    user: users[user_id]
   };
   res.render("urls_registration", templateVars);
 });
 
 // View route to one URL
 app.get("/urls/:id", (req, res) => {
+  const user_id = req.cookies.user_id;
   const templateVars = {
-    username: req.cookies["username"],
+    user: users[user_id],
     id: req.params.id,
     longURL: urlDatabase[req.params.id]
   };
@@ -94,6 +111,15 @@ app.post("/urls/:id", (req, res) => {
 app.post("/urls/:id/delete", (req, res) => {
   const id = req.params.id;
   delete urlDatabase[id];
+  res.redirect("/urls");
+});
+
+app.post("/register", (req, res) => {
+  const id = generateRandomString();
+  const email = req.body.email;
+  const password = req.body.password;
+  users[id] = { id, email, password };
+  res.cookie("user_id", id);
   res.redirect("/urls");
 });
 
