@@ -22,10 +22,12 @@ const generateRandomString = () => {
   return result;
 };
 
+/*------------------------  RENDER ROUTES  ------------------------*/
 app.get("/", (req, res) => {
   res.send("Hello!");
 });
 
+// View all URLs
 app.get("/urls", (req, res) => {
   const templateVars = {
     username: req.cookies["username"],
@@ -34,6 +36,7 @@ app.get("/urls", (req, res) => {
   res.render("urls_index", templateVars);
 });
 
+// View route to create new URL
 app.get("/urls/new", (req, res) => {
   const templateVars = {
     username: req.cookies["username"],
@@ -41,6 +44,7 @@ app.get("/urls/new", (req, res) => {
   res.render("urls_new", templateVars);
 });
 
+// View route to one URL
 app.get("/urls/:id", (req, res) => {
   const templateVars = {
     username: req.cookies["username"],
@@ -50,15 +54,19 @@ app.get("/urls/:id", (req, res) => {
   res.render("urls_show", templateVars);
 });
 
+// Route to redirect to long URL
 app.get("/u/:id", (req, res) => {
   const longURL = urlDatabase[req.params.id];
   res.redirect(longURL);
 });
 
+// View route to json file of url database
 app.get("/urls.json", (req, res) => {
   res.json(urlDatabase);
 });
 
+/*------------------------  API ROUTES  ------------------------*/
+// Create new URL
 app.post("/urls", (req, res) => {
   const longURL = req.body.longURL;
   const id = generateRandomString();
@@ -66,6 +74,7 @@ app.post("/urls", (req, res) => {
   res.redirect(`/urls/${id}`);
 });
 
+// Update URL
 app.post("/urls/:id", (req, res) => {
   const id = req.params.id;
   const longURL = req.body.longURL;
@@ -73,23 +82,27 @@ app.post("/urls/:id", (req, res) => {
   res.redirect("/urls");
 });
 
+// Delete URL
 app.post("/urls/:id/delete", (req, res) => {
   const id = req.params.id;
   delete urlDatabase[id];
   res.redirect("/urls");
 });
 
+// Login
 app.post("/login", (req, res) => {
   const username = req.body.username;
   res.cookie('username', username);
   res.redirect("/urls");
 });
 
+// Logout
 app.post("/logout", (req, res) => {
   res.clearCookie('username');
   res.redirect("/urls");
 });
 
+/*------------------------  LISTEN METHOD  ------------------------*/
 app.listen(PORT, () => {
   console.log(`Example app listening on port ${PORT}!`);
 });
