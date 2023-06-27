@@ -35,7 +35,7 @@ const generateRandomString = () => {
   return result;
 };
 
-const userLookup = (email) => {
+const getUserByEmail = (email) => {
   for (const userKey in users) {
     const user = users[userKey];
     if (user.email === email) {
@@ -129,7 +129,19 @@ app.post("/register", (req, res) => {
   const id = generateRandomString();
   const email = req.body.email;
   const password = req.body.password;
+
+  if (!email || !password) {
+    res.status(400).send("Enter valid email and password.");
+    return;
+  }
+
+  if (getUserByEmail(email)) {
+    res.status(400).send("Email already exists.");
+    return;
+  }
+
   users[id] = { id, email, password };
+  console.log(users);
   res.cookie("user_id", id);
   res.redirect("/urls");
 });
