@@ -36,12 +36,12 @@
               <td><%= urls[id] %></td>
               <td>
                 <form method="GET" action="/urls/<%= id %>">
-                  <button type="submit" class="btn" style="color: #0084FF; border-color: #0084FF;">Edit</button>
+                  <button type="submit" class="btn btn-outline-primary">Edit</button>
                 </form>
               </td>
               <td>
                 <form method="POST" action="/urls/<%= id %>/delete">
-                  <button type="submit" class="btn" style="color: red; border-color: red">Delete</button>
+                  <button type="submit" class="btn btn-outline-danger" >Delete</button>
                 </form>
               </td>
             </tr>
