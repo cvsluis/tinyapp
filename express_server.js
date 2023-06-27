@@ -35,6 +35,16 @@ const generateRandomString = () => {
   return result;
 };
 
+const userLookup = (email) => {
+  for (const userKey in users) {
+    const user = users[userKey];
+    if (user.email === email) {
+      return user;
+    }
+  }
+  return null;
+};
+
 /*------------------------  RENDER ROUTES  ------------------------*/
 app.get("/", (req, res) => {
   res.send("Hello!");
