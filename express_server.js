@@ -64,7 +64,7 @@ app.get("/urls", (req, res) => {
 app.get("/urls/new", (req, res) => {
   const user_id = req.cookies.user_id;
   const templateVars = {
-    user: users[user_id]  
+    user: users[user_id]
   };
   res.render("urls_new", templateVars);
 });
@@ -75,7 +75,7 @@ app.get("/urls/register", (req, res) => {
   const templateVars = {
     user: users[user_id]
   };
-  res.render("urls_registration", templateVars);
+  res.render("register", templateVars);
 });
 
 // View route to one URL
