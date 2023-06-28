@@ -70,12 +70,12 @@ app.get("/urls/new", (req, res) => {
   if (!users[user_id]) {
     res.redirect("/login");
     return;
-  } else {
-    const templateVars = {
-      user: users[user_id]
-    };
-    res.render("urls_new", templateVars);
   }
+
+  const templateVars = {
+    user: users[user_id]
+  };
+  res.render("urls_new", templateVars);
 });
 
 // View route to registration page
@@ -85,12 +85,13 @@ app.get("/register", (req, res) => {
   // user is logged in, redirect
   if (users[user_id]) {
     res.redirect("/urls");
-  } else {
-    const templateVars = {
-      user: users[user_id]
-    };
-    res.render("register", templateVars);
+    return;
   }
+
+  const templateVars = {
+    user: users[user_id]
+  };
+  res.render("register", templateVars);
 });
 
 // View route to login page
@@ -100,17 +101,19 @@ app.get("/login", (req, res) => {
   // user is logged in, redirect
   if (users[user_id]) {
     res.redirect("/urls");
-  } else {
-    const templateVars = {
-      user: users[user_id]
-    };
-    res.render("login", templateVars);
+    return;
   }
+
+  const templateVars = {
+    user: users[user_id]
+  };
+  res.render("login", templateVars);
 });
 
 // View route to one URL
 app.get("/urls/:id", (req, res) => {
   const user_id = req.cookies.user_id;
+
   const templateVars = {
     user: users[user_id],
     id: req.params.id,
