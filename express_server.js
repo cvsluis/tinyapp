@@ -112,7 +112,14 @@ app.get("/login", (req, res) => {
 
 // View route to one URL
 app.get("/urls/:id", (req, res) => {
+  const id = req.params.id;
   const user_id = req.cookies.user_id;
+
+  // url does not exist in database
+  if (!urlDatabase[id]) {
+    res.status(400).send("URL does not exist in database.");
+    return;
+  }
 
   const templateVars = {
     user: users[user_id],
