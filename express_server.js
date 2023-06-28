@@ -74,19 +74,31 @@ app.get("/urls/new", (req, res) => {
 // View route to registration page
 app.get("/register", (req, res) => {
   const user_id = req.cookies.user_id;
-  const templateVars = {
-    user: users[user_id]
-  };
-  res.render("register", templateVars);
+
+  // user is logged in, redirect
+  if (users[user_id]) {
+    res.redirect("/urls");
+  } else {
+    const templateVars = {
+      user: users[user_id]
+    };
+    res.render("register", templateVars);
+  }
 });
 
 // View route to login page
 app.get("/login", (req, res) => {
   const user_id = req.cookies.user_id;
-  const templateVars = {
-    user: users[user_id]
-  };
-  res.render("login", templateVars);
+
+  // user is logged in, redirect
+  if (users[user_id]) {
+    res.redirect("/urls");
+  } else {
+    const templateVars = {
+      user: users[user_id]
+    };
+    res.render("login", templateVars);
+  }
 });
 
 // View route to one URL
