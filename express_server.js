@@ -134,6 +134,8 @@ app.get("/urls.json", (req, res) => {
 // Create new URL
 app.post("/urls", (req, res) => {
   const user_id = req.cookies.user_id;
+
+  // user is not logged in, send error message
   if (!users[user_id]) {
     res.status(403).send("Please log in to shorten URLs.");
     return;
