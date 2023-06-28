@@ -159,12 +159,12 @@ app.post("/login", (req, res) => {
   const email = req.body.email;
   const password = req.body.password;
 
-  if (!getUserByEmail(email)) {
+  const user = getUserByEmail(email);
+
+  if (!user) {
     res.status(403).send("Email cannot be found.");
     return;
   }
-
-  const user = getUserByEmail(email);
 
   if (user.password !== password) {
     res.status(403).send("Incorrect password.");
