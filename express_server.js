@@ -26,6 +26,7 @@ const users = {
   },
 };
 
+// Function that returns random string of 6 characters
 const generateRandomString = () => {
   let result = '';
   const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
@@ -35,6 +36,7 @@ const generateRandomString = () => {
   return result;
 };
 
+// Function that takes in email address and checks users database for match
 const getUserByEmail = (email) => {
   for (const userKey in users) {
     const user = users[userKey];
