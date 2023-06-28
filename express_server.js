@@ -145,27 +145,38 @@ app.post("/register", (req, res) => {
   }
 
   if (getUserByEmail(email)) {
-    res.status(400).send("Email already exists.");
+    res.status(400).send("Account already exists with this email.");
     return;
   }
 
   users[id] = { id, email, password };
-  console.log(users);
   res.cookie("user_id", id);
   res.redirect("/urls");
 });
 
 // Login
 app.post("/login", (req, res) => {
-  const username = req.body.username;
-  res.cookie('username', username);
+  const email = req.body.email;
+  const password = req.body.password;
+
+  if (!getUserByEmail(email)) {
+    res.status(403).send("Email cannot be found.");
+  }
+
+  const user = getUserByEmail(email);
+
+  if (user.password !== password) {
+    res.status(403).send("Incorrect password.");
+  }
+
+  res.cookie("user_id", user.id);
   res.redirect("/urls");
 });
 
 // Logout
 app.post("/logout", (req, res) => {
-  res.clearCookie('username');
-  res.redirect("/urls");
+  res.clearCookie('user_id');
+  res.redirect("/login");
 });
 
 /*------------------------  LISTEN METHOD  ------------------------*/
