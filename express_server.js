@@ -130,14 +130,14 @@ app.get("/urls/:id", (req, res) => {
   const templateVars = {
     user: users[user_id],
     id: req.params.id,
-    longURL: urlDatabase[req.params.id]
+    longURL: urlDatabase[req.params.id].longURL
   };
   res.render("urls_show", templateVars);
 });
 
 // Route to redirect to long URL
 app.get("/u/:id", (req, res) => {
-  const longURL = urlDatabase[req.params.id];
+  const longURL = urlDatabase[req.params.id].longURL;
   res.redirect(longURL);
 });
 
@@ -159,7 +159,12 @@ app.post("/urls", (req, res) => {
 
   const longURL = req.body.longURL;
   const id = generateRandomString();
-  urlDatabase[id] = longURL;
+
+  urlDatabase[id] = {
+    longURL: longURL,
+    userID: user_id
+  };
+  console.log(urlDatabase);
   res.redirect(`/urls/${id}`);
 });
 
