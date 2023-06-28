@@ -161,12 +161,14 @@ app.post("/login", (req, res) => {
 
   if (!getUserByEmail(email)) {
     res.status(403).send("Email cannot be found.");
+    return;
   }
 
   const user = getUserByEmail(email);
 
   if (user.password !== password) {
     res.status(403).send("Incorrect password.");
+    return;
   }
 
   res.cookie("user_id", user.id);
