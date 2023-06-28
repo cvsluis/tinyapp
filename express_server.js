@@ -65,10 +65,17 @@ app.get("/urls", (req, res) => {
 // View route to create new URL
 app.get("/urls/new", (req, res) => {
   const user_id = req.cookies.user_id;
-  const templateVars = {
-    user: users[user_id]
-  };
-  res.render("urls_new", templateVars);
+
+  // user is not logged in, redirect to login page
+  if (!users[user_id]) {
+    res.redirect("/login");
+    return;
+  } else {
+    const templateVars = {
+      user: users[user_id]
+    };
+    res.render("urls_new", templateVars);
+  }
 });
 
 // View route to registration page
@@ -126,6 +133,12 @@ app.get("/urls.json", (req, res) => {
 /*------------------------  API ROUTES  ------------------------*/
 // Create new URL
 app.post("/urls", (req, res) => {
+  const user_id = req.cookies.user_id;
+  if (!users[user_id]) {
+    res.status(403).send("Please log in to shorten URLs.");
+    return;
+  }
+
   const longURL = req.body.longURL;
   const id = generateRandomString();
   urlDatabase[id] = longURL;
