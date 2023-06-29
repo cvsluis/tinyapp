@@ -72,67 +72,67 @@ app.get("/", (req, res) => {
 
 // View users URLs
 app.get("/urls", (req, res) => {
-  const user_id = req.cookies.user_id;
+  const userId = req.cookies.userId;
 
   // user is not logged in
-  if (!users[user_id]) {
+  if (!users[userId]) {
     res.status(400).send("Please login to view URLs");
     return;
   }
 
   // updated url database
-  const database = urlsForUser(user_id);
+  const database = urlsForUser(userId);
   const templateVars = {
     urls: database,
-    user: users[user_id]
+    user: users[userId]
   };
   res.render("urls_index", templateVars);
 });
 
 // View route to create new URL
 app.get("/urls/new", (req, res) => {
-  const user_id = req.cookies.user_id;
+  const userId = req.cookies.userId;
 
   // user is not logged in, redirect to login page
-  if (!users[user_id]) {
+  if (!users[userId]) {
     res.redirect("/login");
     return;
   }
 
   const templateVars = {
-    user: users[user_id]
+    user: users[userId]
   };
   res.render("urls_new", templateVars);
 });
 
 // View route to registration page
 app.get("/register", (req, res) => {
-  const user_id = req.cookies.user_id;
+  const userId = req.cookies.userId;
 
   // user is logged in, redirect
-  if (users[user_id]) {
+  if (users[userId]) {
     res.redirect("/urls");
     return;
   }
 
   const templateVars = {
-    user: users[user_id]
+    user: users[userId]
   };
   res.render("register", templateVars);
 });
 
 // View route to login page
 app.get("/login", (req, res) => {
-  const user_id = req.cookies.user_id;
+  const userId = req.cookies.userId;
 
   // user is logged in, redirect
-  if (users[user_id]) {
+  if (users[userId]) {
     res.redirect("/urls");
     return;
   }
 
   const templateVars = {
-    user: users[user_id]
+    user: users[userId]
   };
   res.render("login", templateVars);
 });
@@ -140,7 +140,7 @@ app.get("/login", (req, res) => {
 // View route to one URL
 app.get("/urls/:id", (req, res) => {
   const id = req.params.id;
-  const user_id = req.cookies.user_id;
+  const userId = req.cookies.userId;
 
   // url does not exist in database
   if (!urlDatabase[id]) {
@@ -149,19 +149,19 @@ app.get("/urls/:id", (req, res) => {
   }
 
   // user is not logged in
-  if (!users[user_id]) {
+  if (!users[userId]) {
     res.status(400).send("Please login to view URLs");
     return;
   }
 
   // user does not own url
-  if (urlDatabase[id].userID !== user_id) {
+  if (urlDatabase[id].userID !== userId) {
     res.status(400).send("You do not have access to this URL.");
     return;
   }
 
   const templateVars = {
-    user: users[user_id],
+    user: users[userId],
     id: req.params.id,
     longURL: urlDatabase[req.params.id].longURL
   };
@@ -182,10 +182,10 @@ app.get("/urls.json", (req, res) => {
 /*------------------------  API ROUTES  ------------------------*/
 // Create new URL
 app.post("/urls", (req, res) => {
-  const user_id = req.cookies.user_id;
+  const userId = req.cookies.userId;
 
   // user is not logged in, send error message
-  if (!users[user_id]) {
+  if (!users[userId]) {
     res.status(403).send("Please log in to shorten URLs.");
     return;
   }
@@ -195,7 +195,7 @@ app.post("/urls", (req, res) => {
 
   urlDatabase[id] = {
     longURL: longURL,
-    userID: user_id
+    userID: userId
   };
   res.redirect(`/urls/${id}`);
 });
@@ -204,22 +204,22 @@ app.post("/urls", (req, res) => {
 app.post("/urls/:id", (req, res) => {
   const id = req.params.id;
   const longURL = req.body.longURL;
-  const user_id = req.cookies.user_id;
+  const userId = req.cookies.userId;
 
   // id does not exist
-  if (!id) {
+  if (!urlDatabase[id]) {
     res.status(400).send("URL does not exist");
     return;
   }
 
   // user is not logged in
-  if (!users[user_id]) {
+  if (!users[userId]) {
     res.status(403).send("Please log in to shorten URLs.");
     return;
   }
 
   // user does not own url
-  if (urlDatabase[id].userID !== user_id) {
+  if (urlDatabase[id].userID !== userId) {
     res.status(400).send("You do not have access to this URL.");
     return;
   }
@@ -252,7 +252,7 @@ app.post("/register", (req, res) => {
   }
 
   users[id] = { id, email, password };
-  res.cookie("user_id", id);
+  res.cookie("userId", id);
   res.redirect("/urls");
 });
 
@@ -273,13 +273,13 @@ app.post("/login", (req, res) => {
     return;
   }
 
-  res.cookie("user_id", user.id);
+  res.cookie("userId", user.id);
   res.redirect("/urls");
 });
 
 // Logout
 app.post("/logout", (req, res) => {
-  res.clearCookie('user_id');
+  res.clearCookie('userId');
   res.redirect("/login");
 });
 
