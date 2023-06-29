@@ -49,9 +49,9 @@ const generateRandomString = () => {
 };
 
 // Function that takes in email address and checks users database for match
-const getUserByEmail = (email) => {
-  for (const userKey in users) {
-    const user = users[userKey];
+const getUserByEmail = (email, database) => {
+  for (const userKey in database) {
+    const user = database[userKey];
     if (user.email === email) {
       return user;
     }
@@ -273,7 +273,7 @@ app.post("/register", (req, res) => {
     return;
   }
 
-  if (getUserByEmail(email)) {
+  if (getUserByEmail(email, users)) {
     res.status(400).send("Account already exists with this email.");
     return;
   }
@@ -288,7 +288,7 @@ app.post("/login", (req, res) => {
   const email = req.body.email;
   const password = req.body.password;
 
-  const user = getUserByEmail(email);
+  const user = getUserByEmail(email, users);
 
   if (!user) {
     res.status(403).send("Email cannot be found.");
