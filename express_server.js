@@ -6,6 +6,8 @@ const bcrypt = require("bcryptjs");
 const app = express();
 const PORT = 8080;
 
+const { getUserByEmail } = require("./helpers");
+
 app.set("view engine", "ejs");
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
@@ -46,17 +48,6 @@ const generateRandomString = () => {
     result += chars[Math.floor(Math.random() * chars.length)];
   }
   return result;
-};
-
-// Function that takes in email address and checks users database for match
-const getUserByEmail = (email, database) => {
-  for (const userKey in database) {
-    const user = database[userKey];
-    if (user.email === email) {
-      return user;
-    }
-  }
-  return null;
 };
 
 // Function that returns the URLS of specific userID
