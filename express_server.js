@@ -154,6 +154,12 @@ app.get("/urls/:id", (req, res) => {
     return;
   }
 
+  // user does not own url
+  if (urlDatabase[id].userID !== user_id) {
+    res.status(400).send("You do not have access to this URL.");
+    return;
+  }
+
   const templateVars = {
     user: users[user_id],
     id: req.params.id,
