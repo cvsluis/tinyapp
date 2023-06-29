@@ -197,7 +197,6 @@ app.post("/urls", (req, res) => {
     longURL: longURL,
     userID: user_id
   };
-  console.log(urlDatabase);
   res.redirect(`/urls/${id}`);
 });
 
@@ -205,7 +204,27 @@ app.post("/urls", (req, res) => {
 app.post("/urls/:id", (req, res) => {
   const id = req.params.id;
   const longURL = req.body.longURL;
-  urlDatabase[id] = longURL;
+  const user_id = req.cookies.user_id;
+
+  // id does not exist
+  if (!id) {
+    res.status(400).send("URL does not exist");
+    return;
+  }
+
+  // user is not logged in
+  if (!users[user_id]) {
+    res.status(403).send("Please log in to shorten URLs.");
+    return;
+  }
+
+  // user does not own url
+  if (urlDatabase[id].userID !== user_id) {
+    res.status(400).send("You do not have access to this URL.");
+    return;
+  }
+
+  urlDatabase[id].longURL = longURL;
   res.redirect("/urls");
 });
 
