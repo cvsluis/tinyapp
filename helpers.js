@@ -1,4 +1,4 @@
-// Function that takes in email address and checks users database for match
+// Function that takes in email address and returns match in users database
 const getUserByEmail = (email, database) => {
   for (const userKey in database) {
     const user = database[userKey];
@@ -6,7 +6,7 @@ const getUserByEmail = (email, database) => {
       return user;
     }
   }
-  return null;
+  return;
 };
 
 module.exports = { getUserByEmail };
