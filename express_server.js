@@ -53,16 +53,37 @@ const getUserByEmail = (email) => {
   return null;
 };
 
+
+// Function that returns the URLS of specific userID
+const urlsForUser = (id) => {
+  const newDatabase = {};
+  for (const url in urlDatabase) {
+    if (urlDatabase[url].userID === id) {
+      newDatabase[url] = urlDatabase[url];
+    }
+  }
+  return newDatabase;
+};
+
 /*------------------------  RENDER ROUTES  ------------------------*/
 app.get("/", (req, res) => {
   res.send("Hello!");
 });
 
-// View all URLs
+// View users URLs
 app.get("/urls", (req, res) => {
   const user_id = req.cookies.user_id;
+
+  // user is not logged in
+  if (!users[user_id]) {
+    res.status(400).send("Please login to view URLs");
+    return;
+  }
+
+  // updated url database
+  const database = urlsForUser(user_id);
   const templateVars = {
-    urls: urlDatabase,
+    urls: database,
     user: users[user_id]
   };
   res.render("urls_index", templateVars);
@@ -124,6 +145,12 @@ app.get("/urls/:id", (req, res) => {
   // url does not exist in database
   if (!urlDatabase[id]) {
     res.status(400).send("URL does not exist in database.");
+    return;
+  }
+
+  // user is not logged in
+  if (!users[user_id]) {
+    res.status(400).send("Please login to view URLs");
     return;
   }
 
