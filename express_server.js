@@ -231,6 +231,25 @@ app.post("/urls/:id", (req, res) => {
 // Delete URL
 app.post("/urls/:id/delete", (req, res) => {
   const id = req.params.id;
+  const userId = req.cookies.userId;
+
+  // id does not exist
+  if (!urlDatabase[id]) {
+    res.status(400).send("URL does not exist");
+    return;
+  }
+
+  // user is not logged in
+  if (!users[userId]) {
+    res.status(403).send("Please log in to shorten URLs.");
+    return;
+  }
+
+  // user does not own url
+  if (urlDatabase[id].userID !== userId) {
+    res.status(400).send("You do not have access to this URL.");
+    return;
+  }
   delete urlDatabase[id];
   res.redirect("/urls");
 });
