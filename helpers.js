@@ -20,11 +20,11 @@ const getUserByEmail = (email, database) => {
 };
 
 // Function that returns the URLS of specific userID
-const urlsForUser = (id) => {
+const urlsForUser = (id, database) => {
   const newDatabase = {};
-  for (const url in urlDatabase) {
-    if (urlDatabase[url].userID === id) {
-      newDatabase[url] = urlDatabase[url];
+  for (const url in database) {
+    if (database[url].userID === id) {
+      newDatabase[url] = database[url];
     }
   }
   return newDatabase;

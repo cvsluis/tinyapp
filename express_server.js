@@ -54,7 +54,7 @@ app.get("/urls", (req, res) => {
   }
 
   // filtered url database
-  const database = urlsForUser(userID);
+  const database = urlsForUser(userID, urlDatabase);
   const templateVars = {
     urls: database,
     user: users[userID]
