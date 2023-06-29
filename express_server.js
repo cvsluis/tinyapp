@@ -53,7 +53,6 @@ const getUserByEmail = (email) => {
   return null;
 };
 
-
 // Function that returns the URLS of specific userID
 const urlsForUser = (id) => {
   const newDatabase = {};
@@ -76,11 +75,11 @@ app.get("/urls", (req, res) => {
 
   // user is not logged in
   if (!users[userId]) {
-    res.status(400).send("Please login to view URLs");
+    res.status(400).send("Please register or login to view URLs");
     return;
   }
 
-  // updated url database
+  // filtered url database
   const database = urlsForUser(userId);
   const templateVars = {
     urls: database,
