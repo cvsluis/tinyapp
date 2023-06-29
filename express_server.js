@@ -6,7 +6,7 @@ const bcrypt = require("bcryptjs");
 const app = express();
 const PORT = 8080;
 
-const { getUserByEmail } = require("./helpers");
+const { generateRandomString, getUserByEmail, urlsForUser } = require("./helpers");
 
 app.set("view engine", "ejs");
 app.use(express.urlencoded({ extended: true }));
@@ -38,27 +38,6 @@ const users = {
     email: "user2@example.com",
     password: "dishwasher-funk",
   },
-};
-
-// Function that returns random string of 6 characters
-const generateRandomString = () => {
-  let result = '';
-  const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-  for (let i = 0; i < 6; i++) {
-    result += chars[Math.floor(Math.random() * chars.length)];
-  }
-  return result;
-};
-
-// Function that returns the URLS of specific userID
-const urlsForUser = (id) => {
-  const newDatabase = {};
-  for (const url in urlDatabase) {
-    if (urlDatabase[url].userID === id) {
-      newDatabase[url] = urlDatabase[url];
-    }
-  }
-  return newDatabase;
 };
 
 /*------------------------  RENDER ROUTES  ------------------------*/
