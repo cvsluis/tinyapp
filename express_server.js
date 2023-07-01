@@ -201,7 +201,7 @@ app.post("/urls", (req, res) => {
 });
 
 // Update URL
-app.post("/urls/:id", (req, res) => {
+app.put("/urls/:id", (req, res) => {
   // set id to parameter from GET request
   const id = req.params.id;
   // set longURL to POST request value
