@@ -1,5 +1,6 @@
 /*------------------------  DEPENDENCIES  ------------------------*/
 const express = require("express");
+const methodOverride = require('method-override');
 const cookieSession = require('cookie-session');
 const bcrypt = require("bcryptjs");
 
@@ -14,6 +15,8 @@ const {
 
 app.set("view engine", "ejs");
 app.use(express.urlencoded({ extended: true }));
+// override with POST having ?_method=DELETE
+app.use(methodOverride('_method'));
 app.use(cookieSession({
   name: 'session',
   keys: ["hXlF4ON92Ej4kH_nLmzkqI_Zki0"],
@@ -231,7 +234,7 @@ app.post("/urls/:id", (req, res) => {
 });
 
 // Delete URL
-app.post("/urls/:id/delete", (req, res) => {
+app.delete("/urls/:id", (req, res) => {
   // set id to value from POST request
   const id = req.params.id;
   // set userID to session cookie
@@ -298,7 +301,7 @@ app.post("/login", (req, res) => {
   const password = req.body.password;
   // find user in users database
   const user = getUserByEmail(email, users);
-  
+
   // user is not in database
   if (!user) {
     res.status(403).send("Email cannot be found.");
