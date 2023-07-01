@@ -240,7 +240,7 @@ app.delete("/urls/:id", (req, res) => {
   // set userID to session cookie
   const userID = req.session.userID;
 
-  // id does not exist
+  // id does not exist in url database
   if (!urlDatabase[id]) {
     res.status(400).send("URL does not exist");
     return;
@@ -248,13 +248,13 @@ app.delete("/urls/:id", (req, res) => {
 
   // user is not logged in
   if (!users[userID]) {
-    res.status(403).send("Please log in to shorten URLs.");
+    res.status(401).send("Please log in to shorten URLs.");
     return;
   }
 
   // user does not own url
   if (urlDatabase[id].userID !== userID) {
-    res.status(400).send("You do not have access to this URL.");
+    res.status(401).send("You do not have access to this URL.");
     return;
   }
 
@@ -304,12 +304,12 @@ app.post("/login", (req, res) => {
 
   // user is not in database
   if (!user) {
-    res.status(403).send("Email cannot be found.");
+    res.status(404).send("Email cannot be found.");
     return;
   }
   // entered password does not match password in database
   if (!bcrypt.compareSync(password, user.hashedPassword)) {
-    res.status(403).send("Incorrect password.");
+    res.status(401).send("Incorrect password.");
     return;
   }
   // correct login information, set cookie for user using their id
