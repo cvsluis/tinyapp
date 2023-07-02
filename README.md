@@ -29,3 +29,9 @@ View of Edit page for logged in user
 
 - Install all dependencies (using the `npm install` command).
 - Run the development web server using the `node express_server.js` command.
+
+## Features
+- Timestamp for URL creation date
+- Visit count and unique viewer tracking stats
+- Node package method-override used to simulate PUT and DELETE methods
+- Custom Error message page
