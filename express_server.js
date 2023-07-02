@@ -226,11 +226,9 @@ app.get("/u/:id", (req, res) => {
       // add timestamp of unique visitor
       timestamp: new Date().toUTCString(),
     };
-    // if no value, set to zero, and each time increase unique visits by 1 
+    // if no value, set to zero, and each time increase unique visits by 1
     urlDatabase[id].uniqueVisits = (urlDatabase[id].uniqueVisits || 0) + 1;
   }
-
-  console.log(urlDatabase[id]);
 
   // redirect user to page of the longURL
   res.redirect(longURL);
