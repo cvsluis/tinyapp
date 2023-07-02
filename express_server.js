@@ -236,11 +236,6 @@ app.get("/u/:id", (req, res) => {
   res.redirect(longURL);
 });
 
-// View route to json file of url database
-app.get("/urls.json", (req, res) => {
-  res.json(urlDatabase);
-});
-
 /*------------------------  API ROUTES  ------------------------*/
 // Create new URL
 app.post("/urls", (req, res) => {
