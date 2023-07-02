@@ -217,7 +217,9 @@ app.post("/urls", (req, res) => {
   urlDatabase[id] = {
     longURL: longURL,
     userID: userID,
+    // set date short URL was created
     createdDate: new Date().toUTCString(),
+    // starting view count 
     visitCount: 0
   };
   // redirect user to url page
