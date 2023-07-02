@@ -29,11 +29,13 @@ const urlDatabase = {
   "b2xVn2": {
     longURL: "http://www.lighthouselabs.ca",
     userID: "userRandomID",
+    createdDate: "",
     visitCount: 0
   },
   "9sm5xK": {
     longURL: "http://www.google.com",
     userID: "userRandomID",
+    createdDate: "",
     visitCount: 0
   }
 };
@@ -215,6 +217,7 @@ app.post("/urls", (req, res) => {
   urlDatabase[id] = {
     longURL: longURL,
     userID: userID,
+    createdDate: new Date().toUTCString(),
     visitCount: 0
   };
   // redirect user to url page
