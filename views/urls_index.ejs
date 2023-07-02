@@ -25,6 +25,7 @@
           <tr>
             <th scope="col">Short URL ID</th>
             <th scope="col">Long URL</th>
+            <th scope="col">Views</th>
             <th scope="col">Edit</th>
             <th scope="col">Delete</th>
           </tr>
@@ -34,6 +35,7 @@
             <tr>
               <td><%= id %></td>
               <td><%= urls[id].longURL %></td>
+              <td><%= urls[id].visitCount %></td>
               <td>
                 <form method="GET" action="/urls/<%= id %>">
                   <button type="submit" class="btn btn-outline-primary">Edit</button>

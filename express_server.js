@@ -28,11 +28,13 @@ app.use(cookieSession({
 const urlDatabase = {
   "b2xVn2": {
     longURL: "http://www.lighthouselabs.ca",
-    userID: "userRandomID"
+    userID: "userRandomID",
+    visitCount: 0
   },
   "9sm5xK": {
     longURL: "http://www.google.com",
-    userID: "userRandomID"
+    userID: "userRandomID",
+    visitCount: 0
   }
 };
 
@@ -165,7 +167,8 @@ app.get("/urls/:id", (req, res) => {
   const templateVars = {
     user: users[userID],
     id: req.params.id,
-    longURL: urlDatabase[req.params.id].longURL
+    longURL: urlDatabase[req.params.id].longURL,
+    visitCount: urlDatabase[id].visitCount
   };
   // render urls_show page with template variables
   res.render("urls_show", templateVars);
@@ -173,8 +176,16 @@ app.get("/urls/:id", (req, res) => {
 
 // Route to redirect to long URL
 app.get("/u/:id", (req, res) => {
+  // set id to parameter from GET request
+  const id = req.params.id;
   // set longURL to value of longURL from parameter passed in GET request
   const longURL = urlDatabase[req.params.id].longURL;
+
+  // set session views to value or if none, 0, and then add one
+  req.session.views = (req.session.views || 0) + 1;
+  // update url visit count
+  urlDatabase[id].visitCount = req.session.views;
+
   // redirect user to page of the longURL
   res.redirect(longURL);
 });
@@ -203,7 +214,8 @@ app.post("/urls", (req, res) => {
   // add url object to urlDatabase and set values
   urlDatabase[id] = {
     longURL: longURL,
-    userID: userID
+    userID: userID,
+    visitCount: 0
   };
   // redirect user to url page
   res.redirect(`/urls/${id}`);
