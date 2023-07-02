@@ -404,7 +404,7 @@ app.post("/login", (req, res) => {
     return;
   }
   // entered password does not match password in database, render error page
-  if (!bcrypt.compareSync(password, user.hashedPassword)) {    
+  if (!bcrypt.compareSync(password, user.hashedPassword)) {
     res.status(401);
     res.render("errorPage", {
       status: 401,
