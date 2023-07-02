@@ -190,6 +190,7 @@ app.get("/urls/:id", (req, res) => {
     user: users[userID],
     id: req.params.id,
     longURL: urlDatabase[req.params.id].longURL,
+    createdDate: urlDatabase[req.params.id].createdDate,
     visitCount: urlDatabase[id].visitCount
   };
   // render urls_show page with template variables
