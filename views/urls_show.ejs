@@ -42,6 +42,25 @@
           <h5 class="card-title">Number of times this URL has been visited:</h5>
           <p class="card-text"><%= visitCount %></p>
       </div>
+
+      <div class="card-body justify-content-center">
+      <table class="table" style="width: 60%; margin: auto;">
+        <thead>
+          <tr>
+            <th scope="col">ID</th>
+            <th scope="col">Timestamp</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% for (let id in visitors) { %>
+            <tr>
+              <td><%= id %></td>
+              <td><%= visitors[id].timestamp %></td>
+            </tr>
+          <% } %>
+        </tbody>
+      </table>
+    </div>
     </div>
     <!-- Bootstrap JS -->
     <script

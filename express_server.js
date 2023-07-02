@@ -195,7 +195,9 @@ app.get("/urls/:id", (req, res) => {
     id: req.params.id,
     longURL: urlDatabase[req.params.id].longURL,
     createdDate: urlDatabase[req.params.id].createdDate,
-    visitCount: urlDatabase[id].visitCount
+    visitCount: urlDatabase[id].visitCount,
+    uniqueVisits: urlDatabase[id].uniqueVisits,
+    visitors: urlDatabase[id].visitors
   };
   // render urls_show page with template variables
   res.render("urls_show", templateVars);
