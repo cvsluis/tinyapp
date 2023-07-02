@@ -191,10 +191,10 @@ app.get("/urls/:id", (req, res) => {
   }
 
   const templateVars = {
+    id,
     user: users[userID],
-    id: req.params.id,
-    longURL: urlDatabase[req.params.id].longURL,
-    createdDate: urlDatabase[req.params.id].createdDate,
+    longURL: urlDatabase[id].longURL,
+    createdDate: urlDatabase[id].createdDate,
     visitCount: urlDatabase[id].visitCount,
     uniqueVisits: urlDatabase[id].uniqueVisits,
     visitors: urlDatabase[id].visitors
