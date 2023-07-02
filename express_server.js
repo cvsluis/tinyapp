@@ -30,13 +30,17 @@ const urlDatabase = {
     longURL: "http://www.lighthouselabs.ca",
     userID: "userRandomID",
     createdDate: "",
-    visitCount: 0
+    visitCount: 0,
+    uniqueVisits: 0,
+    visitors: {}
   },
   "9sm5xK": {
     longURL: "http://www.google.com",
     userID: "userRandomID",
     createdDate: "",
-    visitCount: 0
+    visitCount: 0,
+    uniqueVisits: 0,
+    visitors: {}
   }
 };
 
@@ -204,10 +208,29 @@ app.get("/u/:id", (req, res) => {
   // set longURL to value of longURL from parameter passed in GET request
   const longURL = urlDatabase[req.params.id].longURL;
 
+  // URL VISIT TRACKING
   // set session views to value or if none, 0, and then add one
   req.session.views = (req.session.views || 0) + 1;
   // update url visit count
   urlDatabase[id].visitCount = req.session.views;
+
+
+  // if session cookie exists, set it to visitor id, if not then random 6 character string
+  const visitorID = req.session.visitorID || generateRandomString();
+  // set cookie to visitorID (if new = random string, if exists = visitorID)
+  req.session.visitorID = visitorID;
+  // check if visitID exists in visitors already
+  if (!urlDatabase[id].visitors[visitorID]) {
+    // new visitor, so add visitor information to visitors object of tiny URL
+    urlDatabase[id].visitors[visitorID] = {
+      // add timestamp of unique visitor
+      timestamp: new Date().toUTCString(),
+    };
+    // if no value, set to zero, and each time increase unique visits by 1 
+    urlDatabase[id].uniqueVisits = (urlDatabase[id].uniqueVisits || 0) + 1;
+  }
+
+  console.log(urlDatabase[id]);
 
   // redirect user to page of the longURL
   res.redirect(longURL);
@@ -246,7 +269,9 @@ app.post("/urls", (req, res) => {
     // set date short URL was created
     createdDate: new Date().toUTCString(),
     // starting view count
-    visitCount: 0
+    visitCount: 0,
+    uniqueVisits: 0,
+    visitors: {}
   };
   // redirect user to url page
   res.redirect(`/urls/${id}`);
