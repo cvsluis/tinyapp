@@ -20,6 +20,7 @@ app.use(methodOverride('_method'));
 app.use(cookieSession({
   name: 'session',
   keys: ["hXlF4ON92Ej4kH_nLmzkqI_Zki0"],
+  // Cookie Options
   maxAge: 24 * 60 * 60 * 1000 // 24 hours
 }));
 
@@ -50,7 +51,15 @@ const users = {
 
 /*-----------------------  RENDER ROUTES  -----------------------*/
 app.get("/", (req, res) => {
-  res.send("Hello!");
+  // set userID to session cookie
+  const userID = req.session.userID;
+  // user is not logged in, redirect to login page
+  if (!users[userID]) {
+    res.redirect("/login");
+    return;
+  }
+  // user is logged in, redirect to urls page
+  res.redirect("/urls");
 });
 
 // View users URLs
