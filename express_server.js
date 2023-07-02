@@ -71,9 +71,14 @@ app.get("/urls", (req, res) => {
   // set userID to session cookie
   const userID = req.session.userID;
 
-  // user is not logged in
+  // user is not logged in, render error page
   if (!users[userID]) {
-    res.status(400).send("Please register or login to view URLs");
+    res.status(403);
+    res.render("errorPage", {
+      status: 403,
+      message: "Please Register or Login to view URLs",
+      redirectLink: "/login"
+    });
     return;
   }
 
@@ -148,21 +153,36 @@ app.get("/urls/:id", (req, res) => {
   // set userID to session cookie
   const userID = req.session.userID;
 
-  // url does not exist in database
+  // url does not exist in database, render error page
   if (!urlDatabase[id]) {
-    res.status(400).send("URL does not exist in database.");
+    res.status(404);
+    res.render("errorPage", {
+      status: 404,
+      message: `${id} URL does not exist`,
+      redirectLink: null
+    });
     return;
   }
 
-  // user is not logged in
+  // user is not logged in, render error page
   if (!users[userID]) {
-    res.status(400).send("Please login to view URLs");
+    res.status(403);
+    res.render("errorPage", {
+      status: 403,
+      message: "Please Register or Login to view URLs",
+      redirectLink: "/login"
+    });
     return;
   }
 
-  // user does not own url
+  // user does not own url, render error page
   if (urlDatabase[id].userID !== userID) {
-    res.status(400).send("You do not have access to this URL.");
+    res.status(403);
+    res.render("errorPage", {
+      status: 403,
+      message: "You do not have access to this URL.",
+      redirectLink: null
+    });
     return;
   }
 
@@ -203,9 +223,14 @@ app.post("/urls", (req, res) => {
   // set userID to session cookie
   const userID = req.session.userID;
 
-  // user is not logged in, send error message
+  // user is not logged in, render error page
   if (!users[userID]) {
-    res.status(403).send("Please log in to shorten URLs.");
+    res.status(403);
+    res.render("errorPage", {
+      status: 403,
+      message: "Please Register or Login to view URLs",
+      redirectLink: "/login"
+    });
     return;
   }
 
@@ -219,7 +244,7 @@ app.post("/urls", (req, res) => {
     userID: userID,
     // set date short URL was created
     createdDate: new Date().toUTCString(),
-    // starting view count 
+    // starting view count
     visitCount: 0
   };
   // redirect user to url page
@@ -235,21 +260,36 @@ app.put("/urls/:id", (req, res) => {
   // set userID to session cookie
   const userID = req.session.userID;
 
-  // id does not exist
+  // id does not exist, render error page
   if (!urlDatabase[id]) {
-    res.status(400).send("URL does not exist");
+    res.status(404);
+    res.render("errorPage", {
+      status: 404,
+      message: `${id} URL does not exist`,
+      redirectLink: null
+    });
     return;
   }
 
-  // user is not logged in
+  // user is not logged in, render error page
   if (!users[userID]) {
-    res.status(403).send("Please log in to shorten URLs.");
+    res.status(403);
+    res.render("errorPage", {
+      status: 403,
+      message: "Please Register or Login to view URLs",
+      redirectLink: "/login"
+    });
     return;
   }
 
-  // user does not own url
+  // user does not own url, render error page
   if (urlDatabase[id].userID !== userID) {
-    res.status(400).send("You do not have access to this URL.");
+    res.status(403);
+    res.render("errorPage", {
+      status: 403,
+      message: "You do not have access to this URL.",
+      redirectLink: null
+    });
     return;
   }
 
@@ -266,21 +306,36 @@ app.delete("/urls/:id", (req, res) => {
   // set userID to session cookie
   const userID = req.session.userID;
 
-  // id does not exist in url database
+  // id does not exist in url database, render error page
   if (!urlDatabase[id]) {
-    res.status(400).send("URL does not exist");
+    res.status(404);
+    res.render("errorPage", {
+      status: 404,
+      message: `${id} URL does not exist`,
+      redirectLink: null
+    });
     return;
   }
 
-  // user is not logged in
+  // user is not logged in, render error page
   if (!users[userID]) {
-    res.status(401).send("Please log in to shorten URLs.");
+    res.status(403);
+    res.render("errorPage", {
+      status: 403,
+      message: "Please Register or Login to view URLs",
+      redirectLink: "/login"
+    });
     return;
   }
 
-  // user does not own url
+  // user does not own url, render error page
   if (urlDatabase[id].userID !== userID) {
-    res.status(401).send("You do not have access to this URL.");
+    res.status(403);
+    res.render("errorPage", {
+      status: 403,
+      message: "You do not have access to this URL.",
+      redirectLink: null
+    });
     return;
   }
 
@@ -300,15 +355,25 @@ app.post("/register", (req, res) => {
   // hash password using bcrypt
   const hashedPassword = bcrypt.hashSync(password, 10);
 
-  // no email or password entered
+  // no email or password entered, render error page
   if (!email || !password) {
-    res.status(400).send("Enter valid email and password.");
+    res.status(400);
+    res.render("errorPage", {
+      status: 400,
+      message: "Please enter valid Email Address and Password",
+      redirectLink: "/register"
+    });
     return;
   }
 
   // email already exists in users database, can't register with duplicate email
   if (getUserByEmail(email, users)) {
-    res.status(400).send("Account already exists with this email.");
+    res.status(400);
+    res.render("errorPage", {
+      status: 400,
+      message: "Account already exists with this email",
+      redirectLink: "/register"
+    });
     return;
   }
 
@@ -328,14 +393,24 @@ app.post("/login", (req, res) => {
   // find user in users database
   const user = getUserByEmail(email, users);
 
-  // user is not in database
+  // user is not in database, render error page
   if (!user) {
-    res.status(404).send("Email cannot be found.");
+    res.status(404);
+    res.render("errorPage", {
+      status: 404,
+      message: "Email cannot be found. Please Register for your account first.",
+      redirectLink: "/register"
+    });
     return;
   }
-  // entered password does not match password in database
-  if (!bcrypt.compareSync(password, user.hashedPassword)) {
-    res.status(401).send("Incorrect password.");
+  // entered password does not match password in database, render error page
+  if (!bcrypt.compareSync(password, user.hashedPassword)) {    
+    res.status(401);
+    res.render("errorPage", {
+      status: 401,
+      message: "Incorrect Password. Try again.",
+      redirectLink: "/login"
+    });
     return;
   }
   // correct login information, set cookie for user using their id
